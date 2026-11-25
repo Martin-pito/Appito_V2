@@ -1,0 +1,128 @@
+/* ============================================================
+   APPITO V2 — jetons de design
+   Source de vérité : variables Figma (modes « clair » / « nuit »).
+   Aucune couleur ne doit être écrite en dur dans un composant :
+   on utilise exclusivement ces variables.
+   ============================================================ */
+
+:root {
+	/* --- Surfaces et fonds (mode nuit) --- */
+	--bg-0: #050507;
+	--bg-1: #0a0a0f;
+	--bg-2: #111118;
+
+	--surface: rgba(255, 255, 255, 0.055);
+	--surface-strong: rgba(255, 255, 255, 0.09);
+	--surface-input: rgba(255, 255, 255, 0.045);
+	--surface-hover: rgba(255, 255, 255, 0.12);
+	--glass: linear-gradient(
+		150deg,
+		rgba(255, 255, 255, 0.1) 0%,
+		rgba(255, 255, 255, 0.04) 48%,
+		rgba(255, 255, 255, 0.07) 100%
+	);
+
+	/* --- Bordures --- */
+	--border: rgba(255, 255, 255, 0.11);
+	--border-soft: rgba(255, 255, 255, 0.055);
+	--border-red: rgba(255, 31, 61, 0.38);
+
+	/* --- Texte --- */
+	--text: #f6f6f8;
+	--text-muted: #9b9ba8;
+	--text-invert: #08080a;
+
+	/* --- Accent --- */
+	--red: #ff1f3d;
+	--red-2: #ff3d57;
+	--red-deep: #c1121f;
+	--red-soft: rgba(255, 31, 61, 0.13);
+
+	/* --- Élévations --- */
+	--shadow: 0 16px 38px rgba(0, 0, 0, 0.45);
+	--shadow-hover: 0 22px 48px rgba(0, 0, 0, 0.55);
+	--shadow-btn: 0 6px 16px rgba(0, 0, 0, 0.32);
+
+	/* --- Graphiques --- */
+	--chart-grid: rgba(255, 255, 255, 0.1);
+	--chart-1: #ff1f3d;
+	--chart-2: #ff8a5b;
+	--chart-3: #6ea8fe;
+	--chart-4: #59d1a3;
+	--tooltip-bg: rgba(12, 12, 18, 0.94);
+
+	/* --- Rayons --- */
+	--radius: 18px;
+	--radius-sm: 10px;
+	--radius-pill: 999px;
+
+	/* --- Espacements (échelle 4 px) --- */
+	--sp-1: 4px;
+	--sp-2: 8px;
+	--sp-3: 12px;
+	--sp-4: 16px;
+	--sp-5: 20px;
+	--sp-6: 24px;
+	--sp-7: 32px;
+	--sp-8: 48px;
+
+	/* --- Typographie --- */
+	--font: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	--fs-xs: 0.75rem;
+	--fs-sm: 0.875rem;
+	--fs-base: 1rem;
+	--fs-lg: 1.125rem;
+	--fs-xl: 1.375rem;
+	--fs-2xl: 1.75rem;
+	--fs-3xl: 2.25rem;
+
+	/* --- Transitions --- */
+	--t-fast: 0.18s ease-out;
+	--t-base: 0.28s ease-out;
+
+	/* --- Navigation --- */
+	--nav-h: 64px;
+	--header-h: 58px;
+	--safe-bottom: env(safe-area-inset-bottom, 0px);
+	--safe-top: env(safe-area-inset-top, 0px);
+
+	color-scheme: dark;
+}
+
+[data-theme='light'] {
+	--bg-0: #f2f2f6;
+	--bg-1: #ffffff;
+	--bg-2: #e9e9ef;
+
+	--surface: rgba(255, 255, 255, 0.66);
+	--surface-strong: rgba(255, 255, 255, 0.88);
+	--surface-input: rgba(255, 255, 255, 0.92);
+	--surface-hover: rgba(255, 255, 255, 0.99);
+	--glass: linear-gradient(
+		150deg,
+		rgba(255, 255, 255, 0.9) 0%,
+		rgba(255, 255, 255, 0.58) 100%
+	);
+
+	--border: rgba(8, 8, 14, 0.1);
+	--border-soft: rgba(8, 8, 14, 0.06);
+	--border-red: rgba(217, 4, 41, 0.3);
+
+	--text: #0a0a0f;
+	--text-muted: #5d5d6b;
+	--text-invert: #ffffff;
+
+	--red: #d90429;
+	--red-2: #e11d3c;
+	--red-deep: #a4161a;
+	--red-soft: rgba(217, 4, 41, 0.09);
+
+	--shadow: 0 14px 34px rgba(10, 10, 25, 0.09);
+	--shadow-hover: 0 20px 44px rgba(10, 10, 25, 0.14);
+	--shadow-btn: 0 6px 16px rgba(10, 10, 25, 0.1);
+
+	--chart-grid: rgba(8, 8, 14, 0.08);
+	--tooltip-bg: rgba(255, 255, 255, 0.97);
+
+	color-scheme: light;
+}

@@ -1,0 +1,32 @@
+node_modules
+
+# Build
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+/coverage
+/test-results
+
+# Données personnelles : jamais versionnées
+*.sqlite
+*.sqlite3
+*.db
+/backups
+appito-sauvegarde-*.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
