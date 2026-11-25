@@ -102,6 +102,11 @@ Une entrée par session. Des faits, des décisions, des échecs. Pas de narratio
 - « Exportée le jamais » → « Aucune sauvegarde exportée pour le moment ».
 - Sélecteur d'import : libellés raccourcis, `padding-right` porté à 46 px pour
   que la flèche ne coupe plus le texte ; bouton natif du champ fichier stylé.
+- **Musculation sur bureau** : saisie et analyse côte à côte (deux colonnes
+  au-delà de 1000 px, KPI en 2×2 à droite). Le formulaire seul dans une carte
+  de 1100 px laissait un grand vide.
+- Page Course : icônes de contrôle alignées en haut de ligne au lieu d'être
+  centrées sur un paragraphe de trois lignes.
 
 ### Reste
 
