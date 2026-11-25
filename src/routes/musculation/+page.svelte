@@ -152,211 +152,234 @@
 		</div>
 	</div>
 {:else}
-	<section class="card">
-		<div class="card-head">
-			<div>
-				<h2 class="card-title">Saisie</h2>
-				<p class="card-sub">
-					{#if sets[0]}
-						Dernière fois : {formatPrescription(sets[0])} · {formatRelativeDate(sets[0].date)}
-					{:else}
-						Première série pour ce mouvement.
-					{/if}
-				</p>
-			</div>
-		</div>
-
-		{#if recent.length > 0}
-			<div class="chips" role="group" aria-label="Mouvements récents">
-				{#each recent as movement (movement.id)}
-					<button
-						type="button"
-						class="chip"
-						aria-pressed={movement.id === selectedId}
-						onclick={() => selectMovement(movement.id)}
-					>
-						{movement.name}
-					</button>
-				{/each}
-			</div>
-			<div style="height: var(--sp-3)"></div>
-		{/if}
-
-		<div class="field">
-			<label for="mouvement">Mouvement</label>
-			<select
-				id="mouvement"
-				value={selectedId}
-				onchange={(event) => selectMovement(event.currentTarget.value)}
-			>
-				{#each movements as movement (movement.id)}
-					<option value={movement.id}>{movement.name}</option>
-				{/each}
-			</select>
-		</div>
-
-		<div style="height: var(--sp-3)"></div>
-
-		<form class="form-grid" onsubmit={(event) => { event.preventDefault(); save(); }}>
-			<div class="field span-2">
-				<label for="date">Date de la séance</label>
-				<input id="date" type="date" bind:value={date} max={todayISO()} required />
-			</div>
-
-			<div class="field span-2">
-				<label for="poids">Poids (kg)</label>
-				<div class="stepper">
-					<button type="button" class="step-btn" onclick={() => adjust(-2.5)} aria-label="Diminuer de 2,5 kg">
-						−
-					</button>
-					<input
-						id="poids"
-						type="number"
-						bind:value={weight}
-						min="0"
-						max="500"
-						step="2.5"
-						inputmode="decimal"
-						required
-					/>
-					<button type="button" class="step-btn" onclick={() => adjust(2.5)} aria-label="Augmenter de 2,5 kg">
-						+
-					</button>
+	<div class="workout-layout">
+			<section class="card">
+			<div class="card-head">
+				<div>
+					<h2 class="card-title">Saisie</h2>
+					<p class="card-sub">
+						{#if sets[0]}
+							Dernière fois : {formatPrescription(sets[0])} · {formatRelativeDate(sets[0].date)}
+						{:else}
+							Première série pour ce mouvement.
+						{/if}
+					</p>
 				</div>
 			</div>
 
-			<div class="field">
-				<label for="reps">Répétitions</label>
-				<input id="reps" type="number" bind:value={reps} min="1" max="100" step="1" inputmode="numeric" required />
-			</div>
+			{#if recent.length > 0}
+				<div class="chips" role="group" aria-label="Mouvements récents">
+					{#each recent as movement (movement.id)}
+						<button
+							type="button"
+							class="chip"
+							aria-pressed={movement.id === selectedId}
+							onclick={() => selectMovement(movement.id)}
+						>
+							{movement.name}
+						</button>
+					{/each}
+				</div>
+				<div style="height: var(--sp-3)"></div>
+			{/if}
 
 			<div class="field">
-				<label for="series">Séries faites</label>
-				<input
-					id="series"
-					type="number"
-					bind:value={setCount}
-					min="1"
-					max="50"
-					step="1"
-					inputmode="numeric"
-					required
-				/>
-			</div>
-
-			<div class="span-2">
-				<button class="btn btn-primary btn-block" type="submit">
-					<Icon name="plus" size={20} />
-					Enregistrer {setCount} × {reps} @ {formatNumber(weight)} kg
-				</button>
-			</div>
-		</form>
-	</section>
-
-	<div style="height: var(--sp-4)"></div>
-
-	<div class="kpi-grid">
-		<Kpi label="Séries" value={String(kpis.totalSets)} hint={`${kpis.entries} saisie(s)`} />
-		<Kpi label="Poids max" value={formatWeight(kpis.maxWeight)} hint="sur la période" />
-		<Kpi label="Volume" value={formatVolume(kpis.volume)} hint="poids × reps × séries" />
-		<Kpi
-			label="Progression"
-			value={formatPercent(kpis.progressionPct)}
-			hint={period === 0 ? 'période complète' : 'vs période précédente'}
-		/>
-	</div>
-
-	<div style="height: var(--sp-4)"></div>
-
-	<section class="card">
-		<div class="card-head">
-			<div>
-				<h2 class="card-title">Progression</h2>
-				<p class="card-sub">
-					{filtered.length} saisie(s) affichée(s) · {formatVolume(kpis.volume)}
-				</p>
-			</div>
-			<button class="btn btn-ghost btn-sm" type="button" onclick={exportCsv} disabled={filtered.length === 0}>
-				<Icon name="download" size={16} />
-				CSV
-			</button>
-		</div>
-
-		<div class="filters">
-			<div class="segmented" role="group" aria-label="Période">
-				{#each periods as option (option.days)}
-					<button
-						type="button"
-						aria-pressed={period === option.days}
-						onclick={() => (period = option.days)}
-					>
-						{option.label}
-					</button>
-				{/each}
-			</div>
-
-			<div class="field reps-filter">
-				<label class="sr-only" for="filtre-reps">Répétitions</label>
+				<label for="mouvement">Mouvement</label>
 				<select
-					id="filtre-reps"
-					value={String(parsedReps)}
-					onchange={(event) =>
-						(repsFilter = event.currentTarget.value === 'all' ? 'all' : Number(event.currentTarget.value))}
+					id="mouvement"
+					value={selectedId}
+					onchange={(event) => selectMovement(event.currentTarget.value)}
 				>
-					<option value="all">Toutes les répétitions</option>
-					{#each availableReps as value (value)}
-						<option value={String(value)}>{value} répétitions</option>
+					{#each movements as movement (movement.id)}
+						<option value={movement.id}>{movement.name}</option>
 					{/each}
 				</select>
 			</div>
+
+			<div style="height: var(--sp-3)"></div>
+
+			<form class="form-grid" onsubmit={(event) => { event.preventDefault(); save(); }}>
+				<div class="field span-2">
+					<label for="date">Date de la séance</label>
+					<input id="date" type="date" bind:value={date} max={todayISO()} required />
+				</div>
+
+				<div class="field span-2">
+					<label for="poids">Poids (kg)</label>
+					<div class="stepper">
+						<button type="button" class="step-btn" onclick={() => adjust(-2.5)} aria-label="Diminuer de 2,5 kg">
+							−
+						</button>
+						<input
+							id="poids"
+							type="number"
+							bind:value={weight}
+							min="0"
+							max="500"
+							step="2.5"
+							inputmode="decimal"
+							required
+						/>
+						<button type="button" class="step-btn" onclick={() => adjust(2.5)} aria-label="Augmenter de 2,5 kg">
+							+
+						</button>
+					</div>
+				</div>
+
+				<div class="field">
+					<label for="reps">Répétitions</label>
+					<input id="reps" type="number" bind:value={reps} min="1" max="100" step="1" inputmode="numeric" required />
+				</div>
+
+				<div class="field">
+					<label for="series">Séries faites</label>
+					<input
+						id="series"
+						type="number"
+						bind:value={setCount}
+						min="1"
+						max="50"
+						step="1"
+						inputmode="numeric"
+						required
+					/>
+				</div>
+
+				<div class="span-2">
+					<button class="btn btn-primary btn-block" type="submit">
+						<Icon name="plus" size={20} />
+						Enregistrer {setCount} × {reps} @ {formatNumber(weight)} kg
+					</button>
+				</div>
+			</form>
+		</section>
+
+		<div class="workout-side">
+			<div class="kpi-grid">
+			<Kpi label="Séries" value={String(kpis.totalSets)} hint={`${kpis.entries} saisie(s)`} />
+			<Kpi label="Poids max" value={formatWeight(kpis.maxWeight)} hint="sur la période" />
+			<Kpi label="Volume" value={formatVolume(kpis.volume)} hint="poids × reps × séries" />
+			<Kpi
+				label="Progression"
+				value={formatPercent(kpis.progressionPct)}
+				hint={period === 0 ? 'période complète' : 'vs période précédente'}
+			/>
 		</div>
 
-		{#if filtered.length === 0}
-			<div class="empty">
-				<strong>Aucune série pour ce filtre</strong>
-				Élargis la période ou change le nombre de répétitions.
+		<section class="card">
+			<div class="card-head">
+				<div>
+					<h2 class="card-title">Progression</h2>
+					<p class="card-sub">
+						{filtered.length} saisie(s) affichée(s) · {formatVolume(kpis.volume)}
+					</p>
+				</div>
+				<button class="btn btn-ghost btn-sm" type="button" onclick={exportCsv} disabled={filtered.length === 0}>
+					<Icon name="download" size={16} />
+					CSV
+				</button>
 			</div>
-		{:else}
-			<div class="list">
-				{#each filtered.slice(0, 15) as set (set.id)}
-					<div class="list-row">
-						<div class="list-main">
-							<div class="list-title">{formatPrescription(set)}</div>
-							<div class="list-sub">{formatRelativeDate(set.date)}</div>
-						</div>
-						<div class="list-value">{formatVolume(volumeOf(set))}</div>
-						{#if pendingDelete === set.id}
-							<div class="confirm">
-								<button class="btn btn-danger btn-sm" type="button" onclick={() => removeSet(set.id)}>
-									Supprimer
-								</button>
-								<button class="btn btn-ghost btn-sm" type="button" onclick={() => (pendingDelete = null)}>
-									Annuler
-								</button>
+
+			<div class="filters">
+				<div class="segmented" role="group" aria-label="Période">
+					{#each periods as option (option.days)}
+						<button
+							type="button"
+							aria-pressed={period === option.days}
+							onclick={() => (period = option.days)}
+						>
+							{option.label}
+						</button>
+					{/each}
+				</div>
+
+				<div class="field reps-filter">
+					<label class="sr-only" for="filtre-reps">Répétitions</label>
+					<select
+						id="filtre-reps"
+						value={String(parsedReps)}
+						onchange={(event) =>
+							(repsFilter = event.currentTarget.value === 'all' ? 'all' : Number(event.currentTarget.value))}
+					>
+						<option value="all">Toutes les répétitions</option>
+						{#each availableReps as value (value)}
+							<option value={String(value)}>{value} répétitions</option>
+						{/each}
+					</select>
+				</div>
+			</div>
+
+			{#if filtered.length === 0}
+				<div class="empty">
+					<strong>Aucune série pour ce filtre</strong>
+					Élargis la période ou change le nombre de répétitions.
+				</div>
+			{:else}
+				<div class="list">
+					{#each filtered.slice(0, 15) as set (set.id)}
+						<div class="list-row">
+							<div class="list-main">
+								<div class="list-title">{formatPrescription(set)}</div>
+								<div class="list-sub">{formatRelativeDate(set.date)}</div>
 							</div>
-						{:else}
-							<button
-								class="icon-btn"
-								type="button"
-								aria-label="Supprimer cette série"
-								onclick={() => (pendingDelete = set.id)}
-							>
-								<Icon name="trash" size={18} />
-							</button>
-						{/if}
-					</div>
-				{/each}
-			</div>
-			{#if filtered.length > 15}
-				<p class="list-sub" style="margin-top: var(--sp-3)">
-					Les {filtered.length - 15} saisies plus anciennes restent disponibles dans l'export CSV.
-				</p>
+							<div class="list-value">{formatVolume(volumeOf(set))}</div>
+							{#if pendingDelete === set.id}
+								<div class="confirm">
+									<button class="btn btn-danger btn-sm" type="button" onclick={() => removeSet(set.id)}>
+										Supprimer
+									</button>
+									<button class="btn btn-ghost btn-sm" type="button" onclick={() => (pendingDelete = null)}>
+										Annuler
+									</button>
+								</div>
+							{:else}
+								<button
+									class="icon-btn"
+									type="button"
+									aria-label="Supprimer cette série"
+									onclick={() => (pendingDelete = set.id)}
+								>
+									<Icon name="trash" size={18} />
+								</button>
+							{/if}
+						</div>
+					{/each}
+				</div>
+				{#if filtered.length > 15}
+					<p class="list-sub" style="margin-top: var(--sp-3)">
+						Les {filtered.length - 15} saisies plus anciennes restent disponibles dans l'export CSV.
+					</p>
+				{/if}
 			{/if}
-		{/if}
-	</section>
+		</section>
+		</div>
+	</div>
 {/if}
 
 <style>
+	.workout-layout {
+		display: grid;
+		gap: var(--sp-4);
+	}
+
+	.workout-side {
+		display: grid;
+		gap: var(--sp-4);
+	}
+
+	/* Sur grand écran, la saisie et l'analyse vivent côte à côte : un
+	   formulaire de 550 px dans une carte de 1100 px laissait un vide. */
+	@media (min-width: 1000px) {
+		.workout-layout {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			align-items: start;
+		}
+
+		.workout-side .kpi-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
 	.stepper {
 		display: grid;
 		grid-template-columns: 52px 1fr 52px;

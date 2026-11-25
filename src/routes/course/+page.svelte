@@ -51,28 +51,28 @@
 		</p>
 
 		<div class="list">
-			<div class="list-row">
+			<div class="list-row feature">
 				<Icon name="check" size={18} />
 				<div class="list-main">
 					<div class="list-title">Vue d'ensemble</div>
 					<div class="list-sub">courses, distance, D+, temps, allure, FC moyenne</div>
 				</div>
 			</div>
-			<div class="list-row">
+			<div class="list-row feature">
 				<Icon name="check" size={18} />
 				<div class="list-main">
 					<div class="list-title">Cœur & intensité</div>
 					<div class="list-sub">FC pondérée, zones Z1–Z5, part de haute intensité</div>
 				</div>
 			</div>
-			<div class="list-row">
+			<div class="list-row feature">
 				<Icon name="check" size={18} />
 				<div class="list-main">
 					<div class="list-title">Allure & volume</div>
 					<div class="list-sub">meilleure allure, meilleur kilomètre, volume hebdomadaire</div>
 				</div>
 			</div>
-			<div class="list-row">
+			<div class="list-row feature">
 				<Icon name="check" size={18} />
 				<div class="list-main">
 					<div class="list-title">Charge & récupération</div>
@@ -137,3 +137,14 @@
 		</div>
 	</section>
 {/if}
+
+<style>
+	.feature {
+		align-items: flex-start;
+	}
+
+	.feature :global(svg) {
+		margin-top: 2px;
+		flex-shrink: 0;
+	}
+</style>
