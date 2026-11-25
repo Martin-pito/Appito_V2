@@ -20,6 +20,9 @@ const ASSETS = [
 	...prerendered.map(({ path }) => absolute(path))
 ];
 const ROOT = absolute('');
+// Les appels au relais Garmin ne passent jamais par le cache : hors ligne, une
+// synchro doit échouer franchement, pas répondre avec une vieille liste.
+const API_PREFIX = `${new URL(scope).pathname}api/`;
 
 self.addEventListener('install', (event) => {
 	event.waitUntil(
@@ -47,6 +50,7 @@ self.addEventListener('fetch', (event) => {
 
 	const url = new URL(request.url);
 	if (url.origin !== self.location.origin) return;
+	if (url.pathname.startsWith(API_PREFIX)) return;
 
 	// Navigation : réseau d'abord (pour profiter d'une mise à jour), cache
 	// ensuite. Une page jamais visitée retombe sur l'accueil précaché.

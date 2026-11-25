@@ -1,0 +1,5 @@
+# Copier en `.dev.vars` (ignoré par Git) pour `wrangler pages dev`.
+# Ne jamais committer de vraie valeur.
+
+GARMIN_PERSONAL_API_KEY=GCDC_remplacer
+APPITO_SYNC_TOKEN=choisir-un-jeton-long
