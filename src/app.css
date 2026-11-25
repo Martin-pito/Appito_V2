@@ -257,6 +257,7 @@ textarea {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
+	flex-wrap: wrap;
 	gap: var(--sp-3);
 	margin-bottom: var(--sp-4);
 }
@@ -312,6 +313,9 @@ textarea {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: var(--sp-3);
+	/* Sur grand écran, un champ de 550 px de large est illisible : on garde
+	   une colonne de saisie confortable, alignée à gauche. */
+	max-width: 640px;
 }
 
 .form-grid .span-2 {
@@ -368,7 +372,24 @@ select {
 		calc(100% - 13px) calc(50% + 1px);
 	background-size: 5px 5px, 5px 5px;
 	background-repeat: no-repeat;
-	padding-right: var(--sp-7);
+	padding-right: 46px;
+}
+
+input[type='file'] {
+	padding: var(--sp-2);
+	cursor: pointer;
+}
+
+input[type='file']::file-selector-button {
+	margin-right: var(--sp-3);
+	padding: var(--sp-2) var(--sp-3);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-sm);
+	background: var(--surface-strong);
+	color: var(--text);
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
 }
 
 /* ---------- Boutons ---------- */

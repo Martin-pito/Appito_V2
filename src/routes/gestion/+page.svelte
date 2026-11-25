@@ -150,34 +150,36 @@
 							</button>
 						</form>
 					{:else}
-						<div class="row-main">
-							<div class="list-title">{row.movement.name}</div>
-							<div class="list-sub">
-								{row.entries} saisie(s) · {row.totalSets} série(s)
-								{#if row.lastDate}· {formatRelativeDate(row.lastDate)}{/if}
+						<div class="row-line">
+							<div class="row-main">
+								<div class="list-title">{row.movement.name}</div>
+								<div class="list-sub">
+									{row.entries} saisie(s) · {row.totalSets} série(s)
+									{#if row.lastDate}· {formatRelativeDate(row.lastDate)}{/if}
+								</div>
 							</div>
-						</div>
-						<div class="row-stats">
-							<div class="list-value">{formatWeight(row.maxWeight)}</div>
-							<div class="list-sub">{formatVolume(row.volume)}</div>
-						</div>
-						<div class="row-actions">
-							<button
-								class="icon-btn"
-								type="button"
-								aria-label="Renommer {row.movement.name}"
-								onclick={() => startRename(row.movement.id, row.movement.name)}
-							>
-								<Icon name="pencil" size={18} />
-							</button>
-							<button
-								class="icon-btn"
-								type="button"
-								aria-label="Supprimer {row.movement.name}"
-								onclick={() => askDelete(row.movement.id)}
-							>
-								<Icon name="trash" size={18} />
-							</button>
+							<div class="row-stats">
+								<div class="list-value">{formatWeight(row.maxWeight)}</div>
+								<div class="list-sub">{formatVolume(row.volume)}</div>
+							</div>
+							<div class="row-actions">
+								<button
+									class="icon-btn"
+									type="button"
+									aria-label="Renommer {row.movement.name}"
+									onclick={() => startRename(row.movement.id, row.movement.name)}
+								>
+									<Icon name="pencil" size={18} />
+								</button>
+								<button
+									class="icon-btn"
+									type="button"
+									aria-label="Supprimer {row.movement.name}"
+									onclick={() => askDelete(row.movement.id)}
+								>
+									<Icon name="trash" size={18} />
+								</button>
+							</div>
 						</div>
 					{/if}
 
@@ -248,25 +250,26 @@
 		border-bottom: none;
 	}
 
-	.row-main {
+	.row-line {
 		display: flex;
 		align-items: center;
 		gap: var(--sp-3);
 	}
 
-	.row-main .list-title {
+	.row-main {
 		flex: 1;
+		min-width: 0;
 	}
 
 	.row-stats {
 		text-align: right;
-		margin-left: auto;
+		white-space: nowrap;
 	}
 
 	.row-actions {
 		display: flex;
 		gap: var(--sp-2);
-		margin-left: var(--sp-3);
+		flex-shrink: 0;
 	}
 
 	.rename-row {

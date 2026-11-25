@@ -146,8 +146,13 @@
 		<div>
 			<h2 class="card-title">Sauvegarde</h2>
 			<p class="card-sub">
-				Exportée le {formatStamp(lastBackupAt)}. Le fichier sert aussi à passer du téléphone à
-				l'ordinateur.
+				{#if lastBackupAt}
+					Dernière sauvegarde le {formatStamp(lastBackupAt)}. Le fichier sert aussi à passer du
+					téléphone à l'ordinateur.
+				{:else}
+					Aucune sauvegarde exportée pour le moment. Le fichier sert aussi à passer du téléphone
+					à l'ordinateur.
+				{/if}
 			</p>
 		</div>
 		<button class="btn btn-primary" type="button" onclick={exportBackup} disabled={busy}>
@@ -170,8 +175,8 @@
 		<div class="field">
 			<label for="import-mode">Mode</label>
 			<select id="import-mode" bind:value={importMode}>
-				<option value="merge">Fusionner avec les données locales</option>
-				<option value="replace">Remplacer les données locales</option>
+				<option value="merge">Fusionner avec l'existant</option>
+				<option value="replace">Remplacer tout</option>
 			</select>
 		</div>
 

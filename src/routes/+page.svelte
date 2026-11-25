@@ -24,6 +24,7 @@
 		day: 'numeric',
 		month: 'long'
 	}).format(new Date());
+	const todayTitle = todayLabel.charAt(0).toUpperCase() + todayLabel.slice(1);
 
 	const nameById = $derived(new Map(movements.map((movement) => [movement.id, movement.name])));
 	const week = $derived(filterByPeriod(sets, 7));
@@ -56,7 +57,7 @@
 </svelte:head>
 
 <h1 class="page-title">Aujourd'hui</h1>
-<p class="page-sub" style="text-transform: capitalize">{todayLabel}</p>
+<p class="page-sub">{todayTitle}</p>
 
 {#if backupWarning}
 	<div class="notice" role="status">

@@ -61,3 +61,49 @@ Une entrée par session. Des faits, des décisions, des échecs. Pas de narratio
   (sinon basculer sur le routeur à hash, prévu pour les hôtes sans réécriture).
 - Graphique ECharts (M3).
 - Script d'export Garmin et page Course (M5).
+
+---
+
+## 2026-11-25 — mise en ligne
+
+### Fait
+
+- Premier commit poussé sur `main`, workflow de déploiement vert.
+- **Pages activé** : `https://martin-pito.github.io/Appito_V2/`.
+- Le dépôt était privé : GitHub Pages n'existe pas pour un dépôt privé en
+  offre gratuite (422 « Your current plan does not support GitHub Pages »).
+  Rendu public — il ne contient que du code et des icônes.
+- Vérifié en production : les 5 routes répondent 200, le manifeste et les
+  icônes aussi, `/musculation` redirige bien vers `/musculation/`.
+- **Hors ligne vérifié sur le site déployé** : service worker actif, 47 entrées
+  en cache, formulaire de saisie chargé réseau coupé, série enregistrée hors
+  ligne (toast de confirmation).
+- Captures mobile 390×844 et bureau 1440×900 pour les cinq écrans.
+
+### Décisions
+
+- **`trailingSlash` n'est plus une option globale dans SvelteKit 3.** Elle
+  s'exporte depuis `+layout.ts` ; combinée à `adapter-static`, elle produit
+  `musculation/index.html`, ce que GitHub Pages sert sans réécriture. Les
+  chemins d'assets relatifs (`../_app/...`) sont calculés en conséquence.
+- Le dépôt reste public : aucune donnée d'entraînement n'y entre (`.gitignore`).
+
+### Corrections d'interface après captures
+
+- Ligne de mouvement en Gestion : les trois blocs étaient empilés (nom, stats,
+  actions) et donnaient des lignes de 200 px de haut. Regroupés dans une seule
+  ligne flexible.
+- Formulaire de saisie plafonné à 640 px : sur 1440 px, les champs faisaient
+  550 px de large.
+- `card-head` passe à la ligne : le bouton « Exporter » écrasait le texte des
+  réglages sur mobile.
+- Date d'accueil : `text-transform: capitalize` mettait « Novembre » en
+  majuscule ; seule la première lettre est désormais capitalisée.
+- « Exportée le jamais » → « Aucune sauvegarde exportée pour le moment ».
+- Sélecteur d'import : libellés raccourcis, `padding-right` porté à 46 px pour
+  que la flèche ne coupe plus le texte ; bouton natif du champ fichier stylé.
+
+### Reste
+
+- Installation réelle sur Android et sur ordinateur (M4).
+- Graphique ECharts (M3), import Garmin (M5), migration v1 (M7).
