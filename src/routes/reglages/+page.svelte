@@ -3,6 +3,7 @@
 	import Icon from '#lib/components/Icon.svelte';
 	import { db } from '#lib/db/db';
 	import * as repo from '#lib/db/repo';
+	import { clearSyncToken, hasSyncToken, setSyncToken } from '#lib/garmin/token';
 	import { theme, type ThemeChoice } from '#lib/stores/theme.svelte.js';
 	import { toast } from '#lib/stores/toast.svelte.js';
 
@@ -12,6 +13,9 @@
 	let usage = $state<string>('—');
 	let lastBackupAt = $state<string | null>(null);
 	let lastImportAt = $state<string | null>(null);
+	let lastSyncAt = $state<string | null>(null);
+	let syncToken = $state('');
+	let syncTokenSaved = $state(false);
 
 	let importFile = $state<File | null>(null);
 	let importMode = $state<'merge' | 'replace'>('merge');
@@ -38,6 +42,7 @@
 		};
 		lastBackupAt = await repo.getSetting<string | null>('lastBackupAt', null);
 		lastImportAt = await repo.getSetting<string | null>('lastImportAt', null);
+		lastSyncAt = await repo.getSetting<string | null>('garminLastSyncAt', null);
 
 		if (navigator.storage?.estimate) {
 			const estimate = await navigator.storage.estimate();
@@ -47,6 +52,7 @@
 	}
 
 	onMount(async () => {
+		syncTokenSaved = hasSyncToken();
 		await repo.seedIfEmpty();
 		await refresh();
 	});
@@ -101,6 +107,23 @@
 		} finally {
 			busy = false;
 		}
+	}
+
+	function saveSyncToken(): void {
+		if (!syncToken.trim()) {
+			toast.show('Le jeton est vide.', 'error');
+			return;
+		}
+		setSyncToken(syncToken);
+		syncToken = '';
+		syncTokenSaved = hasSyncToken();
+		toast.show('Jeton de synchronisation enregistré.');
+	}
+
+	function forgetSyncToken(): void {
+		clearSyncToken();
+		syncTokenSaved = false;
+		toast.show('Jeton de synchronisation effacé.');
 	}
 
 	function formatStamp(value: string | null): string {
@@ -200,6 +223,52 @@
 		{#if lastImportAt}
 			<p class="list-sub">Dernier import : {formatStamp(lastImportAt)}</p>
 		{/if}
+	</div>
+</section>
+
+<div style="height: var(--sp-4)"></div>
+
+<section class="card">
+	<div class="card-head">
+		<div>
+			<h2 class="card-title">Synchronisation Garmin</h2>
+			<p class="card-sub">
+				{#if syncTokenSaved}
+					Jeton enregistré sur cet appareil. Dernière synchronisation : {formatStamp(lastSyncAt)}.
+				{:else}
+					Aucun jeton : la page Course ne peut pas interroger Garmin. Le jeton est fourni avec
+					l'application.
+				{/if}
+			</p>
+		</div>
+	</div>
+
+	<div class="import-zone">
+		<div class="field">
+			<label for="sync-token-settings">Jeton de synchronisation</label>
+			<input
+				id="sync-token-settings"
+				type="password"
+				autocomplete="off"
+				autocapitalize="off"
+				spellcheck={false}
+				placeholder={syncTokenSaved ? 'Nouveau jeton (facultatif)' : 'Coller le jeton'}
+				bind:value={syncToken}
+			/>
+		</div>
+
+		<div class="confirm-actions" style="margin-top: 0">
+			<button class="btn" type="button" onclick={saveSyncToken} disabled={!syncToken.trim()}>
+				<Icon name="check" size={18} />
+				Enregistrer
+			</button>
+			{#if syncTokenSaved}
+				<button class="btn btn-ghost" type="button" onclick={forgetSyncToken}>
+					<Icon name="trash" size={18} />
+					Oublier ce jeton
+				</button>
+			{/if}
+		</div>
 	</div>
 </section>
 

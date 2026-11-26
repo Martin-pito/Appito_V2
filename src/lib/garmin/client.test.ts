@@ -177,7 +177,8 @@ describe('syncRuns', () => {
 
 		await syncRuns({ fetchImpl, store: storeOf([]), token: 'abc' });
 
-		const [, init] = (fetchImpl as unknown as ReturnType<typeof vi.fn>).mock.calls[0];
+		const [url, init] = (fetchImpl as unknown as ReturnType<typeof vi.fn>).mock.calls[0];
+		expect(url).toBe('/api/garmin/activities');
 		expect(init.headers.Authorization).toBe('Bearer abc');
 	});
 

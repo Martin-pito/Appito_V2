@@ -138,8 +138,11 @@ const dexieStore: RunStore = {
 };
 
 function endpoint(): string {
-	const base = import.meta.env.BASE_URL ?? '/';
-	return `${base.endsWith('/') ? base : `${base}/`}api/garmin/activities`;
+	// Vite renvoie './' quand `base` est vide : le site est alors servi à la
+	// racine. Un chemin relatif partirait de `/course/` et manquerait le relais.
+	const base = import.meta.env.BASE_URL || '/';
+	const root = base === './' || base === '' ? '/' : base.endsWith('/') ? base : `${base}/`;
+	return `${root}api/garmin/activities`;
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {

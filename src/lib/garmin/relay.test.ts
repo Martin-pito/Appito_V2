@@ -130,7 +130,7 @@ describe('relais Garmin', () => {
 
 	it('pagine jusqu’à une page incomplète', async () => {
 		const page = (count: number) =>
-			Array.from({ length: count }, (_, index) => ({ activityId: index, ...activite }));
+			Array.from({ length: count }, (_, index) => ({ ...activite, activityId: index }));
 		const starts: string[] = [];
 		stubFetch((url) => {
 			if (url.includes(TOKEN_URL)) return new Response('JETON', { status: 200 });
