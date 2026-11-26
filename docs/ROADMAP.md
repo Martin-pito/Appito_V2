@@ -1,6 +1,6 @@
 # Feuille de route — Appito V2
 
-État au **2026-11-24**. Un jalon est clos quand son critère de sortie est
+État au **2026-11-26**. Un jalon est clos quand son critère de sortie est
 vérifié, pas quand le code est écrit.
 
 ## M0 — Socle du dépôt ✅
@@ -59,17 +59,35 @@ rechargement. *Atteint.*
 **Critère de sortie** : installation réelle et saisie hors ligne. *iOS non
 testé sur appareil.*
 
-## M5 — Course et import Garmin ⬜
+## M5 — Course et Garmin en direct 🟡
 
-- [ ] Script local `tools/garmin-export.R` réutilisant `R/course_utils.R`
-- [ ] Format `garmin-courses.json` versionné
-- [ ] Écran d'import (fichier), `upsert` par `garminId`
-- [ ] Sections : vue d'ensemble, cœur & intensité, allure & volume,
-      charge & récupération
+- [x] Mapping Garmin → `Run` (28 champs, replis de la v1, valeurs absentes en
+      `null`)
+- [x] Synchro idempotente : `updatedAt` intact sans changement réel
+- [x] Le service worker ne met jamais `/api/*` en cache
+- [x] Relais Cloudflare `GET /api/garmin/activities` : jeton applicatif, jeton
+      Garmin en mémoire, pagination 100, erreurs stables
+- [x] Interface Course (jeton, bouton, états) et Réglages (gestion du jeton)
+- [x] 12 tests de mapping + 12 tests de synchro + 9 tests de relais
+- [ ] Projet Cloudflare créé, deux secrets posés
+- [ ] Sonde de bout en bout : Garmin répond depuis Cloudflare
+- [ ] 106 courses synchronisées, métriques identiques à la v1
+- [ ] Sections cœur & intensité, allure & volume, charge & récupération
 - [ ] Export CSV des courses
 
-**Critère de sortie** : 106 courses importées sans doublon, métriques
-identiques à la v1.
+**Critère de sortie** : 106 courses sans doublon, chiffres identiques à la v1,
+sur l'URL déployée.
+
+## M8 — Dépôt privé et hébergement ⬜
+
+- [x] Relais sans secret dans le bundle (vérifié : `build/` ne contient ni
+      `GCDC_` ni le jeton)
+- [x] Workflow `ci.yml` (check + tests)
+- [ ] Export depuis l'ancienne origine, import sur `pages.dev`
+- [ ] Dépôt passé en privé
+- [ ] GitHub Pages supprimé, `deploy.yml` retiré
+
+**Critère de sortie** : dépôt privé, aucune URL morte, données intactes.
 
 ## M6 — Gestion, Aujourd'hui, Réglages 🟡
 

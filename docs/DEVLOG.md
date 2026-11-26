@@ -112,3 +112,60 @@ Une entrée par session. Des faits, des décisions, des échecs. Pas de narratio
 
 - Installation réelle sur Android et sur ordinateur (M4).
 - Graphique ECharts (M3), import Garmin (M5), migration v1 (M7).
+
+---
+
+## 2026-11-26 — Garmin en direct, relais Cloudflare
+
+### Fait
+
+- **API Garmin testée en direct** : `OPTIONS` sur
+  `personal.connectapi.garmin.com` → `403` sans `Access-Control-Allow-Origin` ;
+  `POST` d'échange → `401`, toujours sans CORS. Aucun navigateur ne peut
+  l'appeler, clé ou pas. Le relais serveur n'est pas un confort, c'est la seule
+  voie.
+- `src/lib/garmin/map.ts` : portage de `course_activity_vers_ligne`
+  (`R/course_utils.R`), 28 champs, neuf types de course, absences en `null`.
+- `src/lib/garmin/client.ts` : `planSync` (ajout / mise à jour / inchangé),
+  préservation de `importedAt` et des tombstones, écriture uniquement des
+  changements réels.
+- `functions/api/garmin/activities.ts` : jeton applicatif, échange de clé,
+  cache de jeton en mémoire (23 h), pagination 100 × 50, erreurs stables.
+- `static/_routes.json` : seule `/api/*` invoque la Function.
+- Service worker : `/api/*` ne passe plus par le cache.
+- Page Course : bouton Synchroniser, saisie du jeton au premier usage, états
+  (jamais / N ajout / à jour / hors ligne / jeton refusé). Réglages : gestion
+  du jeton et date de dernière synchro.
+- 65 tests Vitest (dont 12 mapping, 12 synchro, 9 relais).
+- Vérifié en navigateur sur le build local : relais simulé → 2 courses
+  (le vélo est filtré), seconde synchro « 2 course(s) déjà à jour », hors
+  ligne → message explicite, aucune requête servie par le cache.
+
+### Décisions
+
+- **Cloudflare Pages + une Function**, plutôt qu'un import de fichier : même
+  expérience que la v1 (un bouton), clé hors du dépôt et hors du navigateur,
+  dépôt privé accepté, coût nul.
+- Deux secrets distincts : la clé Garmin et `APPITO_SYNC_TOKEN`. Le second
+  empêche un inconnu qui trouve l'URL de consommer la clé.
+- Le jeton applicatif vit dans `localStorage`, saisi une fois par appareil.
+  Cloudflare Access est écarté : la session expirerait en salle, hors ligne.
+- L'ancienne décision « import par fichier » est abandonnée, y compris dans
+  `AGENTS.md`.
+
+### Échecs
+
+- `import.meta.env.BASE_URL` vaut `'./'` quand `base` est vide : l'appel
+  partait vers `/course/api/garmin/activities` (404). Le chemin est désormais
+  construit en absolu.
+- Le serveur `vite preview` garde le manifeste de l'ancien build : après un
+  rebuild, les chunks hashés répondaient 404. Redémarrer l'aperçu.
+- Test de pagination : `activityId` défini deux fois, refusé par
+  `svelte-check` ; l'objet de base est maintenant étalé en premier.
+
+### Reste
+
+- Création du projet Cloudflare et pose des deux secrets (voir
+  `docs/DEPLOIEMENT.md`).
+- Sonde de bout en bout depuis Cloudflare, puis export/import des données,
+  dépôt privé et suppression de GitHub Pages.

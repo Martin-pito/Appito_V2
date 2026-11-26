@@ -2,8 +2,8 @@
 
 ## Git
 
-- `main` = version déployée sur GitHub Pages. Chaque push sur `main` déclenche
-  le workflow de déploiement.
+- `main` = version déployée. Cloudflare Pages construit chaque push
+  (bascule depuis GitHub Pages en cours, voir `docs/DEPLOIEMENT.md`).
 - Le travail en cours se fait sur une branche courte (`feat/…`, `fix/…`),
   fusionnée dans `main` quand `npm run check` et `npm test` passent.
 - Commits conventionnels : `feat:`, `fix:`, `docs:`, `chore:`, `test:`.
@@ -28,4 +28,8 @@
 
 - Mobile d'abord : cibles ≥ 44 px, saisie à une main, pas de dépendance réseau.
 - Toute suppression destructive est logique (tombstone) et confirmée dans l'UI.
-- L'application ne parle jamais à Garmin : l'import passe par un fichier.
+- L'application parle à Garmin uniquement via le relais `/api/garmin/*`. La
+  clé personnelle et `APPITO_SYNC_TOKEN` vivent dans les secrets Cloudflare,
+  jamais dans le dépôt, jamais dans `build/`.
+- Une synchronisation ne touche `updatedAt` que si un champ a changé : la
+  fusion de sauvegarde arbitre par cette date.
